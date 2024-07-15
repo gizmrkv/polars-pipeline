@@ -37,3 +37,10 @@ class TestPipeline(unittest.TestCase):
         pipeline = Pipeline().drop("a")
         out = pipeline.transform(self.df)
         assert_frame_equal(out, self.df.drop("a"))
+
+    def test_binarize(self):
+        pipeline = Pipeline().pre.binarize(columns="c", threshold=0.1)
+        out = pipeline.transform(self.df)
+        assert_frame_equal(
+            out, self.df.with_columns(pl.col("c").gt(0.1).cast(pl.Int32))
+        )
