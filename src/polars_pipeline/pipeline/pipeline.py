@@ -9,6 +9,7 @@ from polars_pipeline.transformer import Transformer
 from polars_pipeline.typing import FrameType
 
 from .functional import Display, Drop, Select, SortColumns, WithColumns
+from .preprocessing import PreprocessingNameSpace
 
 
 class Pipeline(Transformer):
@@ -45,6 +46,10 @@ class Pipeline(Transformer):
     def pipe(self, transformer: Transformer) -> Self:
         self.transformers.append(transformer)
         return self
+
+    @property
+    def pre(self) -> PreprocessingNameSpace:
+        return PreprocessingNameSpace(self)
 
     def select(
         self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
