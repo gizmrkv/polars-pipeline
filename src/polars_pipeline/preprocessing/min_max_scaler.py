@@ -3,9 +3,9 @@ from typing import Dict, Sequence
 
 import polars as pl
 from polars import LazyFrame
-from polars._typing import FrameType
 
 from polars_pipeline.transformer import Transformer
+from polars_pipeline.typing import FrameType
 
 
 class MinMaxScaler(Transformer):

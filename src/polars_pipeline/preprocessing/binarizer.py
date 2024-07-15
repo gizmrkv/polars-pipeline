@@ -13,8 +13,8 @@ class Binarizer(Transformer):
         self.columns = [columns] if isinstance(columns, str) else columns
         self.threshold = threshold
 
-    def run(self, frame: FrameType) -> FrameType:
-        columns = self.columns or frame.columns
-        return frame.with_columns(
+    def transform(self, X: FrameType) -> FrameType:
+        columns = self.columns or X.columns
+        return X.with_columns(
             [pl.col(col).gt(self.threshold).cast(pl.Int32) for col in columns]
         )

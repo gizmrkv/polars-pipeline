@@ -3,9 +3,9 @@ from typing import Dict, Sequence
 import polars as pl
 import polars.selectors as sc
 from polars import DataFrame, LazyFrame
-from polars._typing import FrameType
 
 from polars_pipeline.transformer import Transformer
+from polars_pipeline.typing import FrameType
 
 
 class LabelEncoder(Transformer):
