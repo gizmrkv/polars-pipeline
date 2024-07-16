@@ -1,0 +1,33 @@
+{
+    "cSpell.words": [
+        "annot",
+        "arange",
+        "binarize",
+        "boxplot",
+        "Boxplot",
+        "cbar",
+        "cmap",
+        "coolwarm",
+        "dplot",
+        "dtype",
+        "figsize",
+        "histplot",
+        "kdeplot",
+        "pbar",
+        "quantile",
+        "randn",
+        "scatterplot",
+        "tqdm",
+        "violinplot",
+        "Violinplot",
+        "viridis",
+        "vmax",
+        "vmin",
+        "xticklabels",
+        "yticklabels"
+    ],
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none",
+        "reportConstantRedefinition": "none"
+    }
+}
