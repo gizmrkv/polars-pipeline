@@ -12,5 +12,5 @@ def log_figure(
         return
 
     log_dir.mkdir(parents=True, exist_ok=True)
-    fig_path = log_dir / f"{caption.lower().replace(" ", "_")}.png"
+    fig_path = log_dir / f"{caption.replace(" ", "_")}.png"
     fig.savefig(fig_path)

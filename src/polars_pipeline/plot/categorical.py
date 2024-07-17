@@ -36,14 +36,13 @@ class BoxPlot(Transformer):
 
         num_set = self.num_set or numerical_columns(X)
         cat_set = self.cat_set or categorical_columns(X)
-        total = len(num_set) * (len(cat_set) - (1 if self.hue else 0))
-        pbar = tqdm(total=total, desc="Boxplot")
+        if self.hue:
+            cat_set = [cat for cat in cat_set if cat != self.hue]
 
+        total = len(num_set) * len(cat_set)
+        pbar = tqdm(total=total, desc="Boxplot")
         for num in num_set:
             for cat in cat_set:
-                if cat == self.hue:
-                    continue
-
                 fig, ax = plt.subplots(figsize=self.figsize)
                 sns.boxplot(X, x=cat, y=num, hue=self.hue, ax=ax)
                 title = f"Boxplot of {num} by {cat}"
@@ -58,9 +57,6 @@ class BoxPlot(Transformer):
                 pbar.update()
 
         pbar.close()
-
-    def fit(self, X: FrameType, y: FrameType | None = None):
-        self.log_figures(X, y)
 
     def transform(self, X: FrameType) -> FrameType:
         self.log_figures(X)
@@ -90,14 +86,13 @@ class ViolinPlot(Transformer):
 
         num_set = self.num_set or numerical_columns(X)
         cat_set = self.cat_set or categorical_columns(X)
-        total = len(num_set) * (len(cat_set) - (1 if self.hue else 0))
-        pbar = tqdm(total=total, desc="Violinplot")
+        if self.hue:
+            cat_set = [cat for cat in cat_set if cat != self.hue]
 
+        total = len(num_set) * len(cat_set)
+        pbar = tqdm(total=total, desc="Violinplot")
         for num in num_set:
             for cat in cat_set:
-                if cat == self.hue:
-                    continue
-
                 fig, ax = plt.subplots(figsize=self.figsize)
                 sns.violinplot(X, x=cat, y=num, hue=self.hue, ax=ax)
                 title = f"Violinplot of {num} by {cat}"
@@ -112,9 +107,6 @@ class ViolinPlot(Transformer):
                 pbar.update()
 
         pbar.close()
-
-    def fit(self, X: FrameType, y: FrameType | None = None):
-        self.log_figures(X, y)
 
     def transform(self, X: FrameType) -> FrameType:
         self.log_figures(X)

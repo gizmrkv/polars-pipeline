@@ -71,9 +71,6 @@ class ScatterPlot(Transformer):
 
         pbar.close()
 
-    def fit(self, X: FrameType, y: FrameType | None = None):
-        self.log_figures(X, y)
-
     def transform(self, X: FrameType) -> FrameType:
         self.log_figures(X)
         return X
@@ -102,7 +99,7 @@ class KDE2dPlot(Transformer):
 
         num_set = self.num_set or numerical_columns(X)
         total = len(num_set) * (len(num_set) - 1) // 2
-        pbar = tqdm(total=total, desc="Scatter")
+        pbar = tqdm(total=total, desc="KDE 2D")
         for i, num1 in enumerate(num_set):
             for num2 in num_set[i + 1 :]:
                 df = X.drop_nulls([num1, num2] + ([self.hue] if self.hue else []))
@@ -122,9 +119,6 @@ class KDE2dPlot(Transformer):
                 pbar.update()
 
         pbar.close()
-
-    def fit(self, X: FrameType, y: FrameType | None = None):
-        self.log_figures(X, y)
 
     def transform(self, X: FrameType) -> FrameType:
         self.log_figures(X)

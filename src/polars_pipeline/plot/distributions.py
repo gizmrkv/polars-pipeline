@@ -74,9 +74,6 @@ class HistPlot(Transformer):
             fig.clear()
             plt.close(fig)
 
-    def fit(self, X: FrameType, y: FrameType | None = None):
-        self.log_figures(X, y)
-
     def transform(self, X: FrameType) -> FrameType:
         self.log_figures(X)
         return X
@@ -134,9 +131,6 @@ class KDEPlot(Transformer):
             log_figure(fig, title, log_dir=self.log_dir)
             fig.clear()
             plt.close(fig)
-
-    def fit(self, X: FrameType, y: FrameType | None = None):
-        self.log_figures(X, y)
 
     def transform(self, X: FrameType) -> FrameType:
         self.log_figures(X)
