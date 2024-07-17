@@ -58,9 +58,6 @@ class CorrelationHeatmap(Transformer):
         fig.clear()
         plt.close(fig)
 
-    def fit(self, X: FrameType, y: FrameType | None = None):
-        self.log_figures(X, y)
-
     def transform(self, X: FrameType) -> FrameType:
         self.log_figures(X)
         return X
@@ -130,6 +127,8 @@ class CountHeatmap(Transformer):
                 )
                 title = f"Count of {cat1} vs {cat2}"
                 ax.set_title(title)
+                ax.set_ylabel(cat1)
+                ax.set_xlabel(cat2)
 
                 log_figure(fig, title, log_dir=self.log_dir)
                 fig.clear()
@@ -138,9 +137,6 @@ class CountHeatmap(Transformer):
                 pbar.update()
 
         pbar.close()
-
-    def fit(self, X: FrameType, y: FrameType | None = None):
-        self.log_figures(X, y)
 
     def transform(self, X: FrameType) -> FrameType:
         self.log_figures(X)

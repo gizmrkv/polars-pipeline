@@ -14,35 +14,36 @@ from .preprocessing import PreprocessingNameSpace
 
 
 class Pipeline(Transformer):
-    def __init__(self, *, log_dir: Path | str | None = "./log") -> None:
+    def __init__(self, *, log_dir: Path | str | None = None) -> None:
         self.transformers: List[Transformer] = []
 
         if log_dir:
-            self.log_dir = Path(log_dir) / datetime.datetime.now().strftime(
-                f"%Y-%m-%d_%H-%M-%S_{uuid.uuid4()}"
-            )
+            self.log_dir = Path(log_dir)
 
     def set_log_dir(self):
         if log_dir := self.log_dir:
+            log_dir = Path(log_dir) / datetime.datetime.now().strftime(
+                f"%Y-%m-%d_%H-%M-%S_{uuid.uuid4()}"
+            )
             zero_pad = len(str(len(self.transformers)))
             for i, transformer in enumerate(self.transformers):
                 name = f"{i:0>{zero_pad}}_{transformer.__class__.__name__}"
                 transformer.log_dir = log_dir / name
 
     def fit(self, X: FrameType, y: FrameType | None = None):
-        self.set_log_dir()
-
-        frame = X
-        for transformer in self.transformers:
-            frame = transformer.fit_transform(frame, y)
+        self.fit_transform(X, y)
 
     def transform(self, X: FrameType) -> FrameType:
         self.set_log_dir()
-
-        frame = X
         for transformer in self.transformers:
-            frame = transformer.transform(frame)
-        return frame
+            X = transformer.transform(X)
+        return X
+
+    def fit_transform(self, X: FrameType, y: FrameType | None = None) -> FrameType:
+        self.set_log_dir()
+        for transformer in self.transformers:
+            X = transformer.fit_transform(X, y)
+        return X
 
     def pipe(self, transformer: Transformer) -> Self:
         self.transformers.append(transformer)

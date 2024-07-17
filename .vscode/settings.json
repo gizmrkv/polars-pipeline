@@ -23,7 +23,9 @@
         "viridis",
         "vmax",
         "vmin",
+        "xlabel",
         "xticklabels",
+        "ylabel",
         "yticklabels"
     ],
     "python.analysis.diagnosticSeverityOverrides": {
