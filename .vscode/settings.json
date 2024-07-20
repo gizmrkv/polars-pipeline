@@ -13,6 +13,10 @@
         "figsize",
         "histplot",
         "kdeplot",
+        "lightgbm",
+        "logloss",
+        "multiclass",
+        "ndarray",
         "pbar",
         "quantile",
         "randn",
@@ -31,5 +35,8 @@
     "python.analysis.diagnosticSeverityOverrides": {
         "reportMissingImports": "none",
         "reportConstantRedefinition": "none"
-    }
+    },
+    "mypy-type-checker.interpreter": [
+        "/home/hoge/polars-pipeline/.venv/bin/python"
+    ]
 }
