@@ -2,9 +2,7 @@
 name = "polars-pipeline"
 version = "0.1.0"
 description = "Add your description here"
-authors = [
-    { name = "gizmrkv", email = "gizmrkv@gmail.com" }
-]
+authors = [{ name = "gizmrkv", email = "gizmrkv@gmail.com" }]
 dependencies = [
     "polars>=1.1.0",
     "seaborn>=0.13.2",
@@ -12,6 +10,7 @@ dependencies = [
     "tqdm>=4.66.4",
     "scikit-learn>=1.5.1",
     "pyarrow>=17.0.0",
+    "lightgbm>=4.4.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -22,10 +21,7 @@ build-backend = "hatchling.build"
 
 [tool.rye]
 managed = true
-dev-dependencies = [
-    "pytest>=8.2.2",
-    "mypy>=1.10.1",
-]
+dev-dependencies = ["pytest>=8.2.2", "mypy>=1.10.1"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
