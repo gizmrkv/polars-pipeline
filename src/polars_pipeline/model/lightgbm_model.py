@@ -9,6 +9,7 @@ from polars_pipeline.exception import (
     ColumnsMismatchError,
     LazyFrameNotSupportedError,
     NotFittedError,
+    TargetRequiredError,
 )
 from polars_pipeline.transformer import Transformer
 from polars_pipeline.typing import FrameType
@@ -40,7 +41,7 @@ class LightGBM(Transformer):
             raise LazyFrameNotSupportedError(self.__class__.__name__, self.fit.__name__)
 
         if y is None:
-            raise ValueError("y cannot be None")
+            raise TargetRequiredError(self.__class__.__name__)
 
         if len(y.columns) > 1:
             raise ValueError("y should have only one column")

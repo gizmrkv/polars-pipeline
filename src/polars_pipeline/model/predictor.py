@@ -22,3 +22,11 @@ class Predictor(Transformer):
             self.model.log_dir = log_dir
 
         return self.model.transform(X.drop(self.target))
+
+    def fit_transform(self, X: FrameType, y: FrameType | None = None) -> FrameType:
+        if log_dir := self.log_dir:
+            self.model.log_dir = log_dir
+
+        y = X.select(self.target)
+        X = X.drop(self.target)
+        return self.model.fit_transform(X, y)
