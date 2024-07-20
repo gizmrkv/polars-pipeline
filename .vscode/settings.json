@@ -1,18 +1,32 @@
 {
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.unusedImports": "never"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true
+    },
     "cSpell.words": [
         "annot",
         "arange",
+        "argmax",
+        "argmin",
         "binarize",
         "boxplot",
         "Boxplot",
         "cbar",
         "cmap",
         "coolwarm",
+        "dataframe",
         "dplot",
         "dtype",
         "figsize",
         "histplot",
         "kdeplot",
+        "lazyframe",
         "lightgbm",
         "logloss",
         "multiclass",
@@ -32,11 +46,25 @@
         "ylabel",
         "yticklabels"
     ],
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportMissingImports": "none",
-        "reportConstantRedefinition": "none"
-    },
     "mypy-type-checker.interpreter": [
         "/home/hoge/polars-pipeline/.venv/bin/python"
+    ],
+    "notebook.codeActionsOnSave": {
+        "notebook.source.fixAll": "explicit",
+        "notebook.source.organizeImports": true
+    },
+    "notebook.defaultFormatter": "charliermarsh.ruff",
+    "notebook.formatOnSave.enabled": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportArgumentType": "none",
+        "reportConstantRedefinition": "none",
+        "reportMissingImports": "none",
+        "reportUnknownVariableType": "none",
+        "reportUnusedImport": "warning"
+    },
+    "python.analysis.typeCheckingMode": "strict",
+    "python.languageServer": "Pylance",
+    "ruff.format.args": [
+        "--config=pyproject.toml"
     ]
 }
