@@ -6,8 +6,11 @@ if TYPE_CHECKING:
 
 import lightgbm as lgb
 import numpy as np
+from polars import DataFrame
+from polars._typing import IntoExpr
+from sklearn.model_selection import BaseCrossValidator
 
-from polars_pipeline.model import LightGBM, Predictor
+from polars_pipeline.model import LightGBM, Predictor, Stacker
 from polars_pipeline.transformer import Transformer
 
 
@@ -29,4 +32,17 @@ class ModelNameSpace:
     ) -> "Pipeline":
         return self.pipeline.pipe(
             LightGBM(params, train_fn=train_fn, predict_fn=predict_fn)
+        )
+
+    def stack(
+        self,
+        model: Transformer,
+        *,
+        fold: BaseCrossValidator,
+        aggs: Iterable[IntoExpr],
+        groups: str | None = None,
+        metrics_fn: Callable[[DataFrame, DataFrame], Dict[str, Any]] | None = None,
+    ) -> "Pipeline":
+        return self.pipeline.pipe(
+            Stacker(model, fold=fold, aggs=aggs, groups=groups, metrics_fn=metrics_fn)
         )

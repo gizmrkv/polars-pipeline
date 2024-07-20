@@ -29,7 +29,11 @@ class BoxPlot(Transformer):
         self.figsize = figsize
 
     def log_figures(self, X: FrameType, y: FrameType | None = None):
-        if y:
+        log_dir = self.log_dir
+        if log_dir is None:
+            return
+
+        if y is not None:
             X = pl.concat([X, y], how="horizontal")
 
         if isinstance(X, LazyFrame):
@@ -53,7 +57,7 @@ class BoxPlot(Transformer):
                     title += f" and {self.hue}"
                 ax.set_title(title)
 
-                log_figure(fig, title, log_dir=self.log_dir)
+                log_figure(fig, title, log_dir)
                 fig.clear()
                 plt.close(fig)
 
@@ -81,7 +85,11 @@ class ViolinPlot(Transformer):
         self.figsize = figsize
 
     def log_figures(self, X: FrameType, y: FrameType | None = None):
-        if y:
+        log_dir = self.log_dir
+        if log_dir is None:
+            return
+
+        if y is not None:
             X = pl.concat([X, y], how="horizontal")
 
         if isinstance(X, LazyFrame):
@@ -105,7 +113,7 @@ class ViolinPlot(Transformer):
                     title += f" and {self.hue}"
                 ax.set_title(title)
 
-                log_figure(fig, title, log_dir=self.log_dir)
+                log_figure(fig, title, log_dir)
                 fig.clear()
                 plt.close(fig)
 

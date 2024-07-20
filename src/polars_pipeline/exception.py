@@ -23,3 +23,9 @@ class ColumnsMismatchError(Exception):
         msg += f"Columns of X: {columns}\n"
         msg += f"Columns of the fitted {name}: {fitted_columns}"
         super().__init__(msg)
+
+
+class TargetRequiredError(Exception):
+    def __init__(self, name: str):
+        self.name = name
+        super().__init__(f"{name} requires target to be set")
