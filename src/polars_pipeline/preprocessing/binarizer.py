@@ -1,9 +1,9 @@
 from typing import Sequence
 
 import polars as pl
-from polars._typing import FrameType
 
 from polars_pipeline.transformer import Transformer
+from polars_pipeline.typing import FrameType
 
 
 class Binarizer(Transformer):
