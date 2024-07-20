@@ -2,6 +2,7 @@ from pathlib import Path
 
 import polars as pl
 from polars_pipeline import Pipeline, Transformer
+from polars_pipeline.model import LightGBM
 from polars_pipeline.typing import FrameType
 
 if __name__ == "__main__":
@@ -48,6 +49,7 @@ if __name__ == "__main__":
                     "CabinSide": pl.Categorical,
                     "CryoSleep": pl.UInt8,
                     "VIP": pl.UInt8,
+                    "IsAdult": pl.UInt8,
                 }
             )
             X = (
@@ -71,18 +73,32 @@ if __name__ == "__main__":
 
             return X
 
+    pipeline = Pipeline(log_dir="./out").pipe(Preprocess()).sort_columns()
+
+    if False:
+        pipeline = (
+            Pipeline(log_dir="./out")
+            .pipe(Preprocess())
+            .sort_columns()
+            .plot.boxplot(hue="Transported")
+            .plot.violinplot(hue="Transported")
+            # .plot.histplot(hue="Transported")
+            .plot.kdeplot(hue="Transported")
+            .plot.scatterplot(hue="Transported")
+            .plot.kde2dplot(hue="Transported")
+            .plot.corr_heatmap()
+            .plot.count_heatmap()
+            .pre.label_encode()
+        )
+
     pipeline = (
-        Pipeline(log_dir="./out")
-        .pipe(Preprocess())
-        .sort_columns()
-        .plot.boxplot(hue="Transported")
-        .plot.violinplot(hue="Transported")
-        # .plot.histplot(hue="Transported")
-        .plot.kdeplot(hue="Transported")
-        .plot.scatterplot(hue="Transported")
-        .plot.kde2dplot(hue="Transported")
-        .plot.corr_heatmap()
-        .plot.count_heatmap()
-        .pre.label_encode()
+        pipeline.pre.label_encode()
+        .model.predict(LightGBM({"objective": "binary"}), target="Transported")
+        .pre.binarize()
     )
-    pipeline.fit_transform(train_df)
+
+    pred_df = pipeline.fit_transform(train_df)
+
+    from sklearn.metrics import accuracy_score
+
+    print(accuracy_score(pred_df, train_df["Transported"]))
