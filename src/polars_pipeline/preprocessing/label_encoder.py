@@ -1,12 +1,12 @@
 from typing import Dict, Sequence
 
 import polars as pl
-import polars.selectors as sc
 from polars import DataFrame, LazyFrame
 
 from polars_pipeline.exception import LazyFrameNotSupportedError
 from polars_pipeline.transformer import Transformer
 from polars_pipeline.typing import FrameType
+from polars_pipeline.utils import categorical_columns
 
 
 class LabelEncoder(Transformer):
@@ -24,8 +24,9 @@ class LabelEncoder(Transformer):
     def fit(self, X: FrameType, y: FrameType | None = None):
         if isinstance(X, LazyFrame):
             raise LazyFrameNotSupportedError(self.__class__.__name__, self.fit.__name__)
+
         self.mappings.clear()
-        x = X.select(self.columns or sc.categorical())
+        x = X.select(self.columns or categorical_columns(X))
         for col in x.columns:
             mapping = x.select(col).unique(maintain_order=self.maintain_order)
             mapping = mapping.with_columns(
