@@ -7,10 +7,11 @@ from matplotlib import pyplot as plt
 from matplotlib.colors import Colormap
 from matplotlib.typing import ColorType
 from polars import LazyFrame
-from polars._typing import FrameType
 from tqdm import tqdm
 
+from polars_pipeline.exception import LazyFrameNotSupportedError
 from polars_pipeline.transformer import Transformer
+from polars_pipeline.typing import FrameType
 from polars_pipeline.utils import categorical_columns, numerical_columns
 
 from .utils import log_figure
@@ -33,7 +34,9 @@ class CorrelationHeatmap(Transformer):
             X = pl.concat([X, y], how="horizontal")
 
         if isinstance(X, LazyFrame):
-            raise ValueError("LazyFrame not supported for plotting")
+            raise LazyFrameNotSupportedError(
+                self.__class__.__name__, self.log_figures.__name__
+            )
 
         X = X.select(numerical_columns(X)).drop_nulls()
         fig, ax = plt.subplots(figsize=self.figsize)
@@ -84,7 +87,9 @@ class CountHeatmap(Transformer):
             X = pl.concat([X, y], how="horizontal")
 
         if isinstance(X, LazyFrame):
-            raise ValueError("LazyFrame not supported for plotting")
+            raise LazyFrameNotSupportedError(
+                self.__class__.__name__, self.log_figures.__name__
+            )
 
         cat_set = self.cat_set or categorical_columns(X)
         total = len(cat_set) * (len(cat_set) - 1) // 2

@@ -4,6 +4,7 @@ import polars as pl
 import polars.selectors as sc
 from polars import DataFrame, LazyFrame
 
+from polars_pipeline.exception import LazyFrameNotSupportedError
 from polars_pipeline.transformer import Transformer
 from polars_pipeline.typing import FrameType
 
@@ -22,8 +23,7 @@ class LabelEncoder(Transformer):
 
     def fit(self, X: FrameType, y: FrameType | None = None):
         if isinstance(X, LazyFrame):
-            raise ValueError("LazyFrame is not supported")
-
+            raise LazyFrameNotSupportedError(self.__class__.__name__, self.fit.__name__)
         self.mappings.clear()
         x = X.select(self.columns or sc.categorical())
         for col in x.columns:

@@ -4,10 +4,11 @@ import polars as pl
 import seaborn as sns
 from matplotlib import pyplot as plt
 from polars import LazyFrame
-from polars._typing import FrameType
 from tqdm import tqdm
 
+from polars_pipeline.exception import LazyFrameNotSupportedError
 from polars_pipeline.transformer import Transformer
+from polars_pipeline.typing import FrameType
 from polars_pipeline.utils import numerical_columns
 
 from .utils import log_figure
@@ -46,7 +47,9 @@ class HistPlot(Transformer):
             X = pl.concat([X, y], how="horizontal")
 
         if isinstance(X, LazyFrame):
-            raise ValueError("LazyFrame not supported for plotting")
+            raise LazyFrameNotSupportedError(
+                self.__class__.__name__, self.log_figures.__name__
+            )
 
         num_set = self.num_set or numerical_columns(X)
         for num in tqdm(num_set, desc="Histogram"):
@@ -106,7 +109,9 @@ class KDEPlot(Transformer):
             X = pl.concat([X, y], how="horizontal")
 
         if isinstance(X, LazyFrame):
-            raise ValueError("LazyFrame not supported for plotting")
+            raise LazyFrameNotSupportedError(
+                self.__class__.__name__, self.log_figures.__name__
+            )
 
         num_set = self.num_set or numerical_columns(X)
         for num in tqdm(num_set, desc="KDE"):

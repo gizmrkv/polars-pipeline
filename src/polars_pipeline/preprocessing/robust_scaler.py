@@ -4,6 +4,7 @@ from typing import Dict, Sequence, Tuple
 import polars as pl
 from polars import LazyFrame
 
+from polars_pipeline.exception import LazyFrameNotSupportedError
 from polars_pipeline.transformer import Transformer
 from polars_pipeline.typing import FrameType
 
@@ -30,7 +31,7 @@ class RobustScaler(Transformer):
 
     def fit(self, X: FrameType, y: FrameType | None = None):
         if isinstance(X, LazyFrame):
-            raise ValueError("LazyFrame is not supported")
+            raise LazyFrameNotSupportedError(self.__class__.__name__, self.fit.__name__)
 
         self.median_values.clear()
         self.iqr_values.clear()

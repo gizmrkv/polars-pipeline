@@ -3,6 +3,7 @@ from typing import Iterable, Literal
 from polars import LazyFrame
 from polars._typing import ColumnNameOrSelector, IntoExpr
 
+from polars_pipeline.exception import NotFittedError
 from polars_pipeline.transformer import Transformer
 from polars_pipeline.typing import FrameType
 
@@ -47,7 +48,7 @@ class SortColumns(Transformer):
 
     def transform(self, X: FrameType) -> FrameType:
         if isinstance(X, LazyFrame):
-            raise NotImplementedError("SortColumns does not support LazyFrame")
+            raise NotFittedError(self.__class__.__name__)
 
         sorted_columns = sorted(
             [{"name": k, "dtype": str(v)} for k, v in X.schema.items()],
