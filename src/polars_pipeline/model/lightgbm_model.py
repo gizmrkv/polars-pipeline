@@ -22,9 +22,15 @@ class LightGBM(Transformer):
         train_fn: Callable[[lgb.Dataset], lgb.Booster] | None = None,
         predict_fn: Callable[[lgb.Booster, np.ndarray], np.ndarray] | None = None,
     ):
+        def default_train_fn(data: lgb.Dataset) -> lgb.Booster:
+            return lgb.train(self.params, data)  # type: ignore
+
+        def default_predict_fn(booster: lgb.Booster, X: np.ndarray) -> np.ndarray:
+            return booster.predict(X)  # type: ignore
+
         self.params = params
-        self.train_fn = train_fn or (lambda data: lgb.train(self.params, data))
-        self.predict_fn = predict_fn or (lambda booster, X: booster.predict(X))  # type: ignore
+        self.train_fn = train_fn or default_train_fn
+        self.predict_fn = predict_fn or default_predict_fn
         self.booster: lgb.Booster | None = None
         self.X_columns: List[str] | None = None
         self.y_column: str | None = None

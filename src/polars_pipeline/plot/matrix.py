@@ -30,7 +30,7 @@ class CorrelationHeatmap(Transformer):
         self.figsize = figsize
 
     def log_figures(self, X: FrameType, y: FrameType | None = None):
-        if y:
+        if y is not None:
             X = pl.concat([X, y], how="horizontal")
 
         if isinstance(X, LazyFrame):
@@ -83,7 +83,7 @@ class CountHeatmap(Transformer):
         self.figsize = figsize
 
     def log_figures(self, X: FrameType, y: FrameType | None = None):
-        if y:
+        if y is not None:
             X = pl.concat([X, y], how="horizontal")
 
         if isinstance(X, LazyFrame):
