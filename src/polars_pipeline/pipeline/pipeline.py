@@ -1,14 +1,14 @@
 import datetime
 import uuid
 from pathlib import Path
-from typing import Iterable, List, Literal, Self
+from typing import Iterable, List, Literal, Self, Sequence
 
 from polars._typing import ColumnNameOrSelector, IntoExpr
 
+from polars_pipeline import functional as F
 from polars_pipeline.transformer import Transformer
 from polars_pipeline.typing import FrameType
 
-from .functional import Display, Drop, Select, SortColumns, WithColumns
 from .model import ModelNameSpace
 from .plot import PlotNameSpace
 from .preprocessing import PreprocessingNameSpace
@@ -65,24 +65,55 @@ class Pipeline(Transformer):
     def select(
         self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
     ) -> Self:
-        return self.pipe(Select(*exprs, **named_exprs))
+        return self.pipe(F.Select(*exprs, **named_exprs))
 
     def with_columns(
         self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
     ) -> Self:
-        return self.pipe(WithColumns(*exprs, **named_exprs))
+        return self.pipe(F.WithColumns(*exprs, **named_exprs))
 
     def drop(
         self,
         *columns: ColumnNameOrSelector | Iterable[ColumnNameOrSelector],
         strict: bool = True,
     ) -> Self:
-        return self.pipe(Drop(*columns, strict=strict))
+        return self.pipe(F.Drop(*columns, strict=strict))
 
     def sort_columns(
         self, by: Literal["dtype", "name"] = "dtype", descending: bool = False
     ) -> Self:
-        return self.pipe(SortColumns(by=by, descending=descending))
+        return self.pipe(F.SortColumns(by=by, descending=descending))
 
     def display(self) -> Self:
-        return self.pipe(Display())
+        return self.pipe(F.Display())
+
+    def mean_horizontal(self, columns: Sequence[str], *, name: str = "mean") -> Self:
+        return self.pipe(F.MeanHorizontal(columns, name=name))
+
+    def sum_horizontal(self, columns: Iterable[str], *, name: str = "sum") -> Self:
+        return self.pipe(F.SumHorizontal(columns, name=name))
+
+    def prod_horizontal(self, columns: Iterable[str], *, name: str = "prod") -> Self:
+        return self.pipe(F.ProdHorizontal(columns, name=name))
+
+    def all_horizontal(self, columns: Iterable[str], *, name: str = "all") -> Self:
+        return self.pipe(F.AllHorizontal(columns, name=name))
+
+    def any_horizontal(self, columns: Iterable[str], *, name: str = "any") -> Self:
+        return self.pipe(F.AnyHorizontal(columns, name=name))
+
+    def max_horizontal(self, columns: Iterable[str], *, name: str = "max") -> Self:
+        return self.pipe(F.MaxHorizontal(columns, name=name))
+
+    def min_horizontal(self, columns: Iterable[str], *, name: str = "min") -> Self:
+        return self.pipe(F.MinHorizontal(columns, name=name))
+
+    def argmax_horizontal(
+        self, columns: Iterable[str], *, name: str = "argmax"
+    ) -> Self:
+        return self.pipe(F.ArgmaxHorizontal(columns, name=name))
+
+    def argmin_horizontal(
+        self, columns: Iterable[str], *, name: str = "argmin"
+    ) -> Self:
+        return self.pipe(F.ArgminHorizontal(columns, name=name))
