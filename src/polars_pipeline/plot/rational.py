@@ -31,6 +31,10 @@ class ScatterPlot(Transformer):
         self.figsize = figsize
 
     def log_figures(self, X: FrameType, y: FrameType | None = None):
+        log_dir = self.log_dir
+        if log_dir is None:
+            return
+
         if y is not None:
             X = pl.concat([X, y], how="horizontal")
 
@@ -66,7 +70,7 @@ class ScatterPlot(Transformer):
                     title += f" by {self.hue}"
                 ax.set_title(title)
 
-                log_figure(fig, title, log_dir=self.log_dir)
+                log_figure(fig, title, log_dir)
                 fig.clear()
                 plt.close(fig)
 
@@ -94,6 +98,10 @@ class KDE2dPlot(Transformer):
         self.figsize = figsize
 
     def log_figures(self, X: FrameType, y: FrameType | None = None):
+        log_dir = self.log_dir
+        if log_dir is None:
+            return
+
         if y is not None:
             X = pl.concat([X, y], how="horizontal")
 
@@ -117,7 +125,7 @@ class KDE2dPlot(Transformer):
                     title += f" by {self.hue}"
                 ax.set_title(title)
 
-                log_figure(fig, title, log_dir=self.log_dir)
+                log_figure(fig, title, log_dir)
                 fig.clear()
                 plt.close(fig)
 
