@@ -71,7 +71,7 @@ class Stacker(Transformer):
 
         if len(metrics_list) > 0 and self.log_dir:
             self.log_dir.mkdir(parents=True, exist_ok=True)
-            with open(self.log_dir / "metrics.json", "w") as f:
+            with open(self.log_dir / f"{'_'.join(y.columns)}.json", "w") as f:
                 json.dump(list_of_dict_to_dict_of_list(metrics_list), f, indent=4)
 
     def transform(self, X: FrameType) -> FrameType:

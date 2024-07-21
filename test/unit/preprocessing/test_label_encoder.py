@@ -7,13 +7,13 @@ def test_basic():
     input = pl.DataFrame(
         {
             "a": pl.Series(["a", "b", "c", "a", "b", "c"], dtype=pl.Utf8),
-            "b": pl.Series([1, 2, -3, 4, 5, 600], dtype=pl.Int64),
+            "b": pl.Series([1, 2, -3, 4, 5, 600], dtype=pl.Int32),
         }
     )
     expected = pl.DataFrame(
         {
-            "b": pl.Series([1, 2, -3, 4, 5, 600], dtype=pl.Int64),
-            "a": pl.Series([0, 1, 2, 0, 1, 2], dtype=pl.Int64),
+            "b": pl.Series([1, 2, -3, 4, 5, 600], dtype=pl.Int32),
+            "a": pl.Series([0, 1, 2, 0, 1, 2], dtype=pl.Int32),
         }
     )
     encoder = LabelEncoder("a", maintain_order=True)
@@ -25,13 +25,13 @@ def test_null():
     input = pl.DataFrame(
         {
             "a": pl.Series(["a", "b", None, None, "b", "c"], dtype=pl.Utf8),
-            "b": pl.Series([1, 2, 3, 4, 5, 6], dtype=pl.Int64),
+            "b": pl.Series([1, 2, 3, 4, 5, 6], dtype=pl.Int32),
         }
     )
     expected = pl.DataFrame(
         {
-            "b": pl.Series([1, 2, 3, 4, 5, 6], dtype=pl.Int64),
-            "a": pl.Series([0, 1, None, None, 1, 3], dtype=pl.Int64),
+            "b": pl.Series([1, 2, 3, 4, 5, 6], dtype=pl.Int32),
+            "a": pl.Series([0, 1, None, None, 1, 3], dtype=pl.Int32),
         }
     )
     encoder = LabelEncoder("a", maintain_order=True)
@@ -52,7 +52,7 @@ def test_unknown():
     )
     expected = pl.DataFrame(
         {
-            "a": pl.Series([0, 1, None, None, 1, 2], dtype=pl.Int64),
+            "a": pl.Series([0, 1, None, None, 1, 2], dtype=pl.Int32),
         }
     )
     encoder = LabelEncoder("a", maintain_order=True)
