@@ -1,9 +1,9 @@
 import datetime
 import uuid
 from pathlib import Path
-from typing import Iterable, List, Literal, Self, Sequence
+from typing import Collection, Iterable, List, Literal, Mapping, Self, Sequence
 
-from polars._typing import ColumnNameOrSelector, IntoExpr
+from polars._typing import ColumnNameOrSelector, IntoExpr, PolarsDataType
 
 from polars_pipeline import functional as F
 from polars_pipeline.transformer import Transformer
@@ -117,3 +117,29 @@ class Pipeline(Transformer):
         self, columns: Iterable[str], *, name: str = "argmin"
     ) -> Self:
         return self.pipe(F.ArgminHorizontal(columns, name=name))
+
+    def dummy(
+        self,
+        columns: ColumnNameOrSelector | Sequence[ColumnNameOrSelector] | None = None,
+        *,
+        separator: str = "_",
+        drop_first: bool = False,
+    ) -> Self:
+        return self.pipe(F.Dummy(columns, separator=separator, drop_first=drop_first))
+
+    def drop_nulls(
+        self,
+        columns: ColumnNameOrSelector | Collection[ColumnNameOrSelector] | None = None,
+    ) -> Self:
+        return self.pipe(F.DropNulls(columns))
+
+    def cast(
+        self,
+        dtypes: (
+            Mapping[ColumnNameOrSelector | PolarsDataType, PolarsDataType]
+            | PolarsDataType
+        ),
+        *,
+        strict: bool = True,
+    ) -> Self:
+        return self.pipe(F.Cast(dtypes, strict=strict))

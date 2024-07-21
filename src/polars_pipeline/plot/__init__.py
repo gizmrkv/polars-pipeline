@@ -1,7 +1,7 @@
 from .categorical import BoxPlot, ViolinPlot
 from .distributions import HistPlot, KDEPlot
 from .matrix import CorrelationHeatmap, CountHeatmap
-from .rational import KDE2dPlot, ScatterPlot
+from .rational import KDE2dPlot, ScatterPlot, UMAPPlot
 
 __all__ = [
     "BoxPlot",
@@ -12,4 +12,5 @@ __all__ = [
     "CountHeatmap",
     "KDE2dPlot",
     "ScatterPlot",
+    "UMAPPlot",
 ]

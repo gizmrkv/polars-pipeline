@@ -24,6 +24,7 @@
         "dataframe",
         "dplot",
         "dtype",
+        "dtypes",
         "figsize",
         "histplot",
         "kdeplot",
@@ -38,6 +39,8 @@
         "randn",
         "scatterplot",
         "tqdm",
+        "umap",
+        "UMAP",
         "violinplot",
         "Violinplot",
         "viridis",
@@ -66,7 +69,8 @@
         "reportUnknownMemberType": "none",
         "reportUnknownParameterType": "none",
         "reportUnknownVariableType": "none",
-        "reportUnusedImport": "warning"
+        "reportUnusedImport": "warning",
+        "reportMissingTypeStubs": "none"
     },
     "python.analysis.typeCheckingMode": "strict",
     "python.languageServer": "Pylance",
