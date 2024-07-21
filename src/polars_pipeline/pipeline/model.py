@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, Dict, Iterable
+from typing import TYPE_CHECKING, Any, Callable, Dict, Iterable, Literal
 
 if TYPE_CHECKING:
     from polars_pipeline import Pipeline
@@ -10,7 +10,7 @@ from polars import DataFrame
 from polars._typing import IntoExpr
 from sklearn.model_selection import BaseCrossValidator
 
-from polars_pipeline.model import LightGBM, Predictor, Stacker
+from polars_pipeline.model import LightGBM, NullPredictor, Predictor, Stacker
 from polars_pipeline.transformer import Transformer
 
 
@@ -18,10 +18,13 @@ class ModelNameSpace:
     def __init__(self, pipeline: "Pipeline"):
         self.pipeline = pipeline
 
-    def predict(
-        self, predicator: Transformer, *, target: str | Iterable[str]
+    def predict(self, model: Transformer, *, target: str | Iterable[str]) -> "Pipeline":
+        return self.pipeline.pipe(Predictor(model, target=target))
+
+    def predict_null(
+        self, model: Transformer, *, target: str, exclude: Iterable[str] | None = None
     ) -> "Pipeline":
-        return self.pipeline.pipe(Predictor(predicator, target=target))
+        return self.pipeline.pipe(NullPredictor(model, target=target, exclude=exclude))
 
     def lightgbm(
         self,
@@ -39,7 +42,7 @@ class ModelNameSpace:
         model: Transformer,
         *,
         fold: BaseCrossValidator,
-        aggs: Iterable[IntoExpr],
+        aggs: Iterable[IntoExpr] | Literal["mean"] = "mean",
         groups: str | None = None,
         metrics_fn: Callable[[DataFrame, DataFrame], Dict[str, Any]] | None = None,
     ) -> "Pipeline":
