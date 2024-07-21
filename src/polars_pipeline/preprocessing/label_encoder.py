@@ -30,7 +30,7 @@ class LabelEncoder(Transformer):
         for col in x.columns:
             mapping = x.select(col).unique(maintain_order=self.maintain_order)
             mapping = mapping.with_columns(
-                pl.arange(0, len(mapping), dtype=pl.Int64).alias("label")
+                pl.arange(0, len(mapping), dtype=pl.Int32).alias("label")
             )
             self.mappings[col] = mapping
 
