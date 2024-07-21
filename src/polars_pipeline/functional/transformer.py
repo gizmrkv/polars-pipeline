@@ -1,9 +1,9 @@
-from typing import Iterable, Literal, Sequence
+from typing import Collection, Iterable, Literal, Mapping, Sequence
 
 from polars import LazyFrame
-from polars._typing import ColumnNameOrSelector, IntoExpr
+from polars._typing import ColumnNameOrSelector, IntoExpr, PolarsDataType
 
-from polars_pipeline.exception import NotFittedError
+from polars_pipeline.exception import LazyFrameNotSupportedError, NotFittedError
 from polars_pipeline.transformer import Transformer
 from polars_pipeline.typing import FrameType
 
@@ -150,3 +150,54 @@ class ArgminHorizontal(Transformer):
 
     def transform(self, X: FrameType) -> FrameType:
         return Horizontal(X).argmin(self.columns, name=self.name)
+
+
+class Dummy(Transformer):
+    def __init__(
+        self,
+        columns: ColumnNameOrSelector | Sequence[ColumnNameOrSelector] | None = None,
+        *,
+        separator: str = "_",
+        drop_first: bool = False,
+    ):
+        self.columns = columns
+        self.separator = separator
+        self.drop_first = drop_first
+
+    def transform(self, X: FrameType) -> FrameType:
+        if isinstance(X, LazyFrame):
+            raise LazyFrameNotSupportedError(
+                self.__class__.__name__, self.transform.__name__
+            )
+
+        return X.to_dummies(
+            self.columns, separator=self.separator, drop_first=self.drop_first
+        )
+
+
+class DropNulls(Transformer):
+    def __init__(
+        self,
+        subset: ColumnNameOrSelector | Collection[ColumnNameOrSelector] | None = None,
+    ):
+        self.subset = subset
+
+    def transform(self, X: FrameType) -> FrameType:
+        return X.drop_nulls(subset=self.subset)
+
+
+class Cast(Transformer):
+    def __init__(
+        self,
+        dtypes: (
+            Mapping[ColumnNameOrSelector | PolarsDataType, PolarsDataType]
+            | PolarsDataType
+        ),
+        *,
+        strict: bool = True,
+    ):
+        self.dtypes = dtypes
+        self.strict = strict
+
+    def transform(self, X: FrameType) -> FrameType:
+        return X.cast(self.dtypes, strict=self.strict)

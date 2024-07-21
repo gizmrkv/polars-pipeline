@@ -14,15 +14,17 @@ from polars_pipeline.plot import (
     KDE2dPlot,
     KDEPlot,
     ScatterPlot,
+    UMAPPlot,
     ViolinPlot,
 )
+from polars_pipeline.transformer import Transformer
 
 
 class PlotNameSpace:
     def __init__(self, pipeline: "Pipeline"):
         self.pipeline = pipeline
 
-    def boxplot(
+    def box(
         self,
         *,
         num_set: Iterable[str] | None = None,
@@ -34,7 +36,7 @@ class PlotNameSpace:
             BoxPlot(num_set=num_set, cat_set=cat_set, hue=hue, figsize=figsize)
         )
 
-    def violinplot(
+    def violin(
         self,
         *,
         num_set: Iterable[str] | None = None,
@@ -46,7 +48,7 @@ class PlotNameSpace:
             ViolinPlot(num_set=num_set, cat_set=cat_set, hue=hue, figsize=figsize)
         )
 
-    def histplot(
+    def hist(
         self,
         *,
         num_set: Iterable[str] | None = None,
@@ -77,7 +79,7 @@ class PlotNameSpace:
             )
         )
 
-    def kdeplot(
+    def kde(
         self,
         num_set: Iterable[str] | None = None,
         hue: str | None = None,
@@ -131,7 +133,7 @@ class PlotNameSpace:
             )
         )
 
-    def scatterplot(
+    def scatter(
         self,
         *,
         num_set: Iterable[str] | None = None,
@@ -150,7 +152,7 @@ class PlotNameSpace:
             )
         )
 
-    def kde2dplot(
+    def kde2d(
         self,
         *,
         num_set: Iterable[str] | None = None,
@@ -161,3 +163,6 @@ class PlotNameSpace:
         return self.pipeline.pipe(
             KDE2dPlot(num_set=num_set, hue=hue, fill=fill, figsize=figsize)
         )
+
+    def umap(self, preprocess: Transformer | None = None) -> "Pipeline":
+        return self.pipeline.pipe(UMAPPlot(preprocess=preprocess))
